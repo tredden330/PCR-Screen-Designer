@@ -3,6 +3,7 @@ from Bio.Blast import NCBIXML
 from Bio import SeqIO
 import primer3
 import time
+import pandas as pd
 
 start_time = time.time()
 
@@ -19,13 +20,12 @@ def blastRequest():
 
 	result_handle.close()
 
-	print("--- Reached Checkpoint 1 in %s seconds ---" % (time.time() - start_time))
-
-#	generatePrimers()
-
 def generatePrimers():
-#	primer3.calcTm('GTAAAACGACGGCCAGT')
 
+	df = pd.DataFrame({'gene_id' : [],
+			   'primer1' : [],
+			   'primer2' : []
+			  })
 	for record in SeqIO.parse("sample_genes.fasta", "fasta"):
 
 		sequence = str(record._seq)
@@ -60,8 +60,14 @@ def generatePrimers():
 			'PRIMER_PRODUCT_SIZE_RANGE' : [length - 100,length],
 			'PRIMER_NUM_RETURN' : 5
 			})
-		print(primers['PRIMER_PAIR_NUM_RETURNED'])
+
+		complementarySequence = primers['PRIMER_RIGHT_0_SEQUENCE']
+		noncompSequence = primers['PRIMER_LEFT_0_SEQUENCE']
+		print("primer1: ", complementarySequence, "primer2: ", noncompSequence)
+		df.loc[len(df.index)] = [id, complementarySequence, noncompSequence]
+
+	df.to_csv("result.csv", index=False)
 
 generatePrimers()
 
-print("--- Reached Checkpoint 2 in %s seconds ---" % (time.time() - start_time))
+print("--- Finished  in %s seconds ---" % (time.time() - start_time))
