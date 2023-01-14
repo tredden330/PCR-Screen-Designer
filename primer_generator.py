@@ -26,7 +26,7 @@ def blastRequest():
 def generatePrimers():
 #	primer3.calcTm('GTAAAACGACGGCCAGT')
 
-	for record in SeqIO.parse("medicagoGene.txt", "fasta"):
+	for record in SeqIO.parse("sample_genes.fasta", "fasta"):
 
 		sequence = str(record._seq)
 		id = record.id
@@ -61,10 +61,6 @@ def generatePrimers():
 			'PRIMER_NUM_RETURN' : 5
 			})
 		print(primers['PRIMER_PAIR_NUM_RETURNED'])
-
-def handleBlastOutput() :
-	print("handling")
-
 
 generatePrimers()
 
