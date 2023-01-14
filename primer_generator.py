@@ -26,7 +26,7 @@ def generatePrimers():
 			   'primer1' : [],
 			   'primer2' : []
 			  })
-	for record in SeqIO.parse("sample_genes.fasta", "fasta"):
+	for record in SeqIO.parse("input.fasta", "fasta"):
 
 		sequence = str(record._seq)
 		id = record.id
